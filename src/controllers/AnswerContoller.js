@@ -1,3 +1,4 @@
+const { where } = require('sequelize');
 const Answer = require('../models/answer');
 
 class AnswerController {
@@ -34,6 +35,19 @@ class AnswerController {
                         }
                         res.status(200).json(answers);
                 } catch (error) {
+                        res.status(500).json({ message: 'internal server error' });
+                }
+        }
+
+        async updateAnswer(req, res) {
+                try {
+                        const { id, text } = req.body;
+                        const updareAnswer = await Answer.update({ text }, { where: { id: questionId } })
+                        return res.status(200).json({
+                                status: 'success',
+                                message: 'is answer is updated'
+                        });
+                } catch (e) {
                         res.status(500).json({ message: 'internal server error' });
                 }
         }
