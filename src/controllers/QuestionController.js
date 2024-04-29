@@ -1,3 +1,4 @@
+const Answer = require('../models/answer');
 const Question = require('../models/question');
 
 class QuestionController {
@@ -39,6 +40,7 @@ class QuestionController {
                                 return res.status(400).json({ message: 'the question not founded' });
                         } else {
                                 const question = await Question.destroy({ where: { id: id } })
+                                const answer = await Answer.destroy({ where: { id: id } })
                                 res.status(200).json({ status: 'success', message: 'the question is deleted' })
                         }
                 } catch (e) {
