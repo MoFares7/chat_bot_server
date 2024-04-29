@@ -4,10 +4,12 @@ class AnswerController {
         async createAnswer(req, res) {
                 try {
                         const { questionId, text } = req.body;
+
                         const answer = await Answer.create({ questionId, text });
                         res.status(200).json(answer);
+
                 } catch (error) {
-                        res.status(500).json({ message: error.message });
+                        res.status(500).json({ message: 'internal server error' });
                 }
         }
 
@@ -16,7 +18,7 @@ class AnswerController {
                         const answers = await Answer.findAll();
                         res.status(200).json(answers);
                 } catch (error) {
-                        return res.status(500).json({ message: 'error in server' })
+                        res.status(500).json({ message: 'internal server error' });
                 }
         }
 
@@ -26,16 +28,15 @@ class AnswerController {
                         if (!questionId) {
                                 return res.status(400).json({ message: "QuestionId parameter is required" });
                         }
-                        const answers = await Answer.findAll({ where: { QuestionId: questionId } });
+                        const answers = await Answer.findAll({ where: { questionId: questionId } });
                         if (!answers || answers.length === 0) {
                                 return res.status(200).json({ message: "No answers found for the provided QuestionId" });
                         }
                         res.status(200).json(answers);
                 } catch (error) {
-                        res.status(500).json({ message: error.message });
+                        res.status(500).json({ message: 'internal server error' });
                 }
         }
-
 }
 
 module.exports = new AnswerController();

@@ -8,6 +8,8 @@ router.get('/answers/index', answerController.getAllAnswer);
 router.get('/answers', answerController.getAnswersByQuestionId);
 
 router.post('/question/store', questionController.createNewQuestion);
-router.get('/question/.index', questionController.getAllQuestion);
+router.get('/question/index', questionController.getAllQuestion);
+router.put('/question/update', questionController.updateQuestion);
+router.delete('/question/destroy', questionController.deleteQuestion);
 
 module.exports = router;
