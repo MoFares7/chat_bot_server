@@ -1,25 +1,43 @@
 const { where } = require('sequelize');
 const Answer = require('../models/answer');
+const Question = require('../models/question');
 
 class AnswerController {
         async createAnswer(req, res) {
                 try {
-                        const { questionId, text } = req.body;
+                        const { questionDescription, answerText } = req.body;
 
-                        const answer = await Answer.create({ questionId, text });
-                        res.status(200).json(answer);
+                        // Create a new question with the provided description
+                        const question = await Question.create({ description: questionDescription });
+
+                        // Create a new answer associated with the created question and the provided answer text
+                        const answer = await Answer.create({ text: answerText, questionId: question.id });
+
+                        res.status(200).json({ answer, question });
 
                 } catch (error) {
-                        res.status(500).json({ message: 'internal server error' });
+                        console.error(error);
+                        res.status(500).json({ message: 'Internal server error' });
                 }
         }
 
         async getAllAnswer(req, res) {
                 try {
-                        const answers = await Answer.findAll();
-                        res.status(200).json(answers);
+                        const answers = await Answer.findAll({
+                                include: Question
+                        });
+
+                        //! Format the response data
+                        const formattedAnswers = answers.map(answer => ({
+                                id: answer.id,
+                                answer: answer.text,
+                                question: answer.Question ? answer.Question.description : null
+                        }));
+
+                        res.status(200).json(formattedAnswers);
                 } catch (error) {
-                        res.status(500).json({ message: 'internal server error' });
+                        console.error(error);
+                        res.status(500).json({ message: 'Internal server error' });
                 }
         }
 
