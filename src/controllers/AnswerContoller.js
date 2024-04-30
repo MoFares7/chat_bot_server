@@ -13,7 +13,7 @@ class AnswerController {
                         // Create a new answer associated with the created question and the provided answer text
                         const answer = await Answer.create({ text: answerText, questionId: question.id });
 
-                        res.status(200).json({ answer, question });
+                        res.status(200).json({ status: 'success', answer, question });
 
                 } catch (error) {
                         console.error(error);
