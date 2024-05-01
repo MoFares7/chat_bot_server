@@ -25,13 +25,23 @@ class QuestionController {
 
         async updateQuestion(req, res) {
                 try {
-                        const { id, text } = req.body;
-                        const updatedQuestion = await Question.update({ text }, { where: { id: id } });
-                        return res.status(200).json({ status: 'success', message: 'the questions is updated' });
+                        const { id, description } = req.body;
+
+                        if (!id) {
+                                return res.status(400).json({ status: 'fail', message: 'No question id provided' });
+                        } else {
+                                await Question.update({ description }, { where: { id: id } });
+                                const que = await Question.findByPk(id);
+                                console.log("this is: " + id)
+                                return res.status(200).json({ status: 'success', message: 'Question updated successfully', que });
+                        }
+
                 } catch (e) {
-                        res.status(500).json({ message: 'intenal server error' });
+                        console.error(e);
+                        res.status(500).json({ message: 'Internal server error' });
                 }
         }
+
 
         async deleteQuestion(req, res) {
                 try {

@@ -60,7 +60,7 @@ class AnswerController {
         async updateAnswer(req, res) {
                 try {
                         const { id, text } = req.body;
-                        const updareAnswer = await Answer.update({ text }, { where: { id: questionId } })
+                        const updareAnswer = await Answer.update({ text }, { where: { id: id } })
                         return res.status(200).json({
                                 status: 'success',
                                 message: 'is answer is updated'
